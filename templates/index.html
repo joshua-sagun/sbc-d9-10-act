@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Own Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 20px;
+            padding: 0;
+        }
+        #ageForm {
+            background-color: #block;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #block;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        input[type="text"], input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: block;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            display: none;
+        }
+        #result h2 {
+            margin-top: 0;
+            color: #333333;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="ageFormContainer">
+        <h1>Enter your name and birth year</h1>
+        <form id="ageForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="birth_year">Birth Year:</label>
+            <input type="number" id="birth_year" name="bday" required><br><br>
+            <input type="button" value="Display" id="displayBtn">
+        </form>
+    </div>
+    <div id="result">
+        <h2>Name: <span id="result_name"></span></h2>
+        <h2>Age: <span id="result_age"></span></h2>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#displayBtn').click(function() {
+                var formData = $('#ageForm').serialize();
+
+                $.ajax({
+                    url: '/ownpage',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        $('#result_name').text(response.name);
+                        $('#result_age').text(response.age);
+                        $('#result').slideDown(); // Show result div
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
